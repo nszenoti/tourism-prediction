@@ -14,5 +14,5 @@ huggingface-hub
 streamlit
 
 # Utils
-python-dotenv
+# python-dotenv
 joblib
