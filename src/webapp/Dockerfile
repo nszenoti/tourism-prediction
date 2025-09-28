@@ -1,28 +1,20 @@
-# Use slim image for smaller size
 FROM python:3.11-slim
 
-# Set working directory
+# Setup app as working directory
 WORKDIR /app
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Create non-root user for security
-RUN useradd -m -u 1000 user
-USER user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
+# Copy application files
+COPY app.py .
+COPY custom_transformers.py .
+COPY constants.py .
 
-WORKDIR $HOME/app
-
-# Copy all application files with proper ownership
-COPY --chown=user app.py .
-COPY --chown=user constants.py .
-COPY --chown=user custom_transformers.py .
-
-# Expose Streamlit port
+# Expose port for Streamlit (default Streamlit port)
 EXPOSE 8501
 
-# Run Streamlit
-CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501", "--server.enableXsrfProtection=false"]
+# Command to run the application
+# The --server.address=0.0.0.0 flag is important as it allows Streamlit to be accessible outside the container.
+CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0"]
