@@ -106,7 +106,7 @@ class ModelTrainer(ABC):
         }
 
         # Log after we get the result
-        logger.info(f"Training completed. Model parameters: {params_used}")
+        logger.info(f"Training completed. Model performance: {model.best_score_}")
         # logger.info(f"Pipeline steps: {[step[0] for step in trained_pipe.steps]}")
 
         return trained_pipe, meta
