@@ -18,8 +18,9 @@ def load_data():
     # Load splits
     X_train = pd.read_csv(f"{base_path}/Xtrain.csv")
     X_test = pd.read_csv(f"{base_path}/Xtest.csv")
-    y_train = pd.read_csv(f"{base_path}/ytrain.csv")
-    y_test = pd.read_csv(f"{base_path}/ytest.csv")
+    # model/sklearn expects y as 1 d array hence instead of (n, 1) -> (n, )
+    y_train = pd.read_csv(f"{base_path}/ytrain.csv").squeeze()
+    y_test = pd.read_csv(f"{base_path}/ytest.csv").squeeze()
 
     logger.info("Data loaded successfully")
     return X_train, X_test, y_train, y_test
@@ -127,7 +128,7 @@ def main():
 
     # Save best model
     model_path = save_pipeline(best_model['pipe'])
-    logger.info(f"Best model saved: {best_model['name']}")
+    logger.info(f"Best model saved: {best_model['name']}, Performance: {best_model['performance']}")
 
     # Upload to HuggingFace
     logger.info("Uploading model to HuggingFace...")

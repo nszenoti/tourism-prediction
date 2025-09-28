@@ -1,6 +1,9 @@
 from sklearn.metrics import (accuracy_score, f1_score, roc_auc_score,
                            precision_score, recall_score)
 import pandas as pd
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 def study_results(results, metric):
     """Helper function to analyze model results
@@ -71,6 +74,9 @@ def select_best_model(pipes, X_train, y_train, X_test, y_test, metric='roc_auc')
             train_score = metric_func(y_train, y_train_pred)
             test_score = metric_func(y_test, y_test_pred)
             generalization_gap = train_score - test_score
+            selection_score = test_score - abs(generalization_gap)
+
+            logger.info(f"EVAL || {name} :- perf > {selection_score} ||")
 
             results.append({
                 'name': name,
@@ -79,10 +85,10 @@ def select_best_model(pipes, X_train, y_train, X_test, y_test, metric='roc_auc')
                 'test_score': test_score,
                 'gap': generalization_gap,
                 'meta': meta,
-                'selection_score': test_score - abs(generalization_gap)
+                'selection_score': selection_score
             })
         except Exception as e:
-            print(f"Error evaluating model {name}: {str(e)}")
+            logger.error(f"Error evaluating model {name}: {str(e)}")
 
     if not results:
         raise ValueError("No models were successfully evaluated")
