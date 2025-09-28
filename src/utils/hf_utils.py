@@ -12,7 +12,7 @@ class HFHandler:
         self.api = HfApi(token=token or os.getenv("HF_TOKEN"))
         self.username = username
 
-    def upload(self, path, repo_name, repo_type="model"):
+    def upload(self, path, repo_name, repo_type="model", space_sdk=None):
         """Upload file or folder to HF
 
         Args:
@@ -27,7 +27,7 @@ class HFHandler:
         try:
             self.api.repo_info(repo_id=repo_id, repo_type=repo_type)
         except RepositoryNotFoundError:
-            create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
+            create_repo(repo_id=repo_id, repo_type=repo_type, private=False, space_sdk=space_sdk)
 
         if os.path.isfile(path):
             file_name = os.path.basename(path)

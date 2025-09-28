@@ -14,7 +14,8 @@ def upload_webapp():
         hf.upload(
             path="src/webapp",
             repo_name="tourism-prediction",
-            repo_type="space"
+            repo_type="space",
+            space_sdk="streamlit"
         )
         logger.info("Webapp successfully uploaded to HuggingFace Space")
 
