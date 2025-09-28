@@ -1,0 +1,18 @@
+# Data & ML
+pandas
+scikit-learn
+catboost
+lightgbm
+
+# MLflow
+mlflow
+
+# HuggingFace
+huggingface-hub
+
+# Deployment
+streamlit
+
+# Utils
+python-dotenv
+joblib

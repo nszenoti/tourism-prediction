@@ -1,0 +1,61 @@
+name: Tourism Prediction Pipeline
+
+on:
+  workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+
+jobs:
+  register-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Upload Dataset to Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/data
+          python src/data/register.py
+
+  data-prep:
+    needs: register-dataset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Run Data Preparation
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/data
+          python src/data/prepare.py
+
+  model-training:
+    needs: data-prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Model Building
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/models
+          python src/models/train.py
+
+  deploy-webapp:
+    needs: model-training  # Runs after model training completes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Deploy to HuggingFace Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python src/deployment/hosting.py

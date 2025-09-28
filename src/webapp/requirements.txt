@@ -1,0 +1,7 @@
+streamlit
+pandas
+huggingface-hub
+scikit-learn
+joblib
+catboost
+lightgbm
