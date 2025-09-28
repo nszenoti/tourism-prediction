@@ -7,15 +7,15 @@ on:
 #       - main
 
 jobs:
-  data-prep:
+  model-training:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Run Data Preparation
+      - name: Model Building
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/data
-          python src/data/prepare.py
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/models
+          python src/models/train.py
