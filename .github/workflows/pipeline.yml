@@ -7,15 +7,15 @@ on:
 #       - main
 
 jobs:
-  register-dataset:
+  data-prep:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Upload Dataset to Hugging Face Hub
+      - name: Run Data Preparation
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src/data
-          python src/data/register.py
+          python src/data/prepare.py
