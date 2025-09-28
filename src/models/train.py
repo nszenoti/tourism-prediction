@@ -128,7 +128,7 @@ def main():
 
     # Save best model
     model_path = save_pipeline(best_model['pipe'])
-    logger.info(f"Best model saved: {best_model['name']}, Performance: {best_model['performance']}")
+    logger.info(f"Best model saved: {best_model['name']}, Performance: {best_model['selection_score']}")
 
     # Upload to HuggingFace
     logger.info("Uploading model to HuggingFace...")
