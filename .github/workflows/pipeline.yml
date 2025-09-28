@@ -7,15 +7,13 @@ on:
 #       - main
 
 jobs:
-  model-training:
+  deploy-webapp:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Model Building
+      - name: Deploy to HuggingFace Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/models
-          python src/models/train.py
+        run: python src/deployment/hosting.py
