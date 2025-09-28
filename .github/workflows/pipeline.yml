@@ -16,4 +16,6 @@ jobs:
       - name: Deploy to HuggingFace Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python src/deployment/hosting.py
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src/deployment
+          python src/deployment/hosting.py
